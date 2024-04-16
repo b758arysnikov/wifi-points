@@ -1,7 +1,7 @@
 import mysql from "mysql2";
-import { newData } from "../app/main.js";
 
-const conn = mysql.createConnection({
+
+export const conn = mysql.createConnection({
     host: "localhost",
     user: "root",
     password: "Y69bs2xkxk",
@@ -19,6 +19,6 @@ conn.connect(err => {
 }
 );
 
-console.log(newData)
 
-conn.end();
+
+
