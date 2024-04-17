@@ -1,41 +1,37 @@
-import {conn} from "../database/database.js";
+import { conn } from "../database/database.js";
 
 fetch("https://apidata.mos.ru/v1/datasets/861/rows?api_key=553083a7-1c08-4000-a53c-9ab2318390e7")
     .then(response => {
-        if(!response.ok){
+        if (!response.ok) {
             throw new Error("No ok!")
         }
         return response.json()
     })
     .then(data => {
-        for(let item of data){
-            const sql = `INSERT INTO points (Name, AdmArea, District, ParkName, WiFiName) VALUES 
-            ("${item.Name}", "${item.AdmArea}", "${item.District}", "${item.ParkName}", "${item.WiFiName}")`
+        console.log(data.splice(0,5))
+        data.forEach(item => {
+            console.log(item.Cells)
+
+            const sql = `INSERT INTO points(AccessFlag, AdmArea, District, Name, ParkName) VALUES 
+            ("${item.Cells.AccessFlag}","${item.Cells.AdmArea}","${item.Cells.District}","${item.Cells.Name}","${item.Cells.ParkName}")`;
             conn.query(sql, (err, result) =>{
                 if(err){
-                    return console.log(err)
+                    throw err;
                 }
                 else{
-                    console.log("Ввод данных успешный!")
-                    console.log(result)
+                    console.log("Данные успешно добавлены!");
                 }
-        })
-    }
-})
-    //     data.forEach(item => {
-    //         const sql = `INSERT INTO points (Name, AdmArea, District, ParkName, WiFiName) VALUES 
-    //         ("${item.Name}", "${item.AdmArea}", "${item.District}", "${item.ParkName}", "${item.WiFiName}")`
-    //         conn.query(sql, (err, result) =>{
-    //             if(err){
-    //                 return console.log(err)
-    //             }
-    //             else{
-    //                 console.log("Ввод данных успешный!")
-    //                 console.log(result)
-    //             }
-    //         })
-    //     });
+            })
+            
+
+
+
+
+
+
+        }); // Конец forEach
         conn.end()
+    }) // Конец then
     .catch(error => {
         console.log(error)
     })
